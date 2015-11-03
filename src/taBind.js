@@ -698,8 +698,235 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 						}, 0);
 						else e.preventDefault();
 					});
+                    
+                    var _handleDboubleUnderline=function(){
+										
+										var flag = 0;
+				
+										selectedElement = angular.element(taSelection.getSelectionElementModified());
+										if (selectedElement[0].tagName == 'I' || selectedElement[0].tagName == 'EM')
+										{
+											flag = flag + 1;
+																
+										}
+										
+										if (selectedElement[0].tagName == 'U')
+										{	
+											flag=flag + 2;
+																
+										}
+										
+										if (selectedElement[0].tagName == 'P')
+										{
+											flag = flag + 4;
+										}
+										
+										if (selectedElement[0].tagName == '')
+										{
+											flag = flag + 8;
+										}
+										
+										
+										
+									switch (flag)
+									{ 
+										 case (0):
+										 {				    
+											return scope.wrapSelection("italic",null);				     			
+											break;
+										 }
+										 case (1):
+										 {
+											//To remove double underline				  
+											scope.wrapSelection("italic",null);
+											return scope.wrapSelection("removeFormat",null);	              			
+											break;
+										 }
+										 case (2):
+										 { 
+										 // Remove underline and apply double underline
+										 scope.wrapSelection("underline",null);
+										 return scope.wrapSelection("italic", null);
+										 break;
+										 }
+										 case (3):
+										 {
+										 // Italic Underline 
+										  scope.wrapSelection("removeFormat",null);
+											scope.wrapSelection("underline",null);
+											return scope.wrapSelection("italic", null);
+														
+											break;
+										 }
+										 
+										 case (4):
+										 {
+											//Remove all style and apply double underline
+											scope.wrapSelection("removeFormat", null);		
+											return scope.wrapSelection("italic", null);
+											
+											break;
+										 }
+										 case (5):
+										 {
 
+										 //Italic Paragraph
+										 scope.wrapSelection("removeFormat",null);
+											
+											break;
+
+										 }
+										 case (6):
+										 {
+											scope.wrapSelection("removeFormat",null);
+											//Underline Paragraph
+											break;
+										 }
+										 case (7):
+										 {
+											//"Paragraph Underline Italic
+											scope.wrapSelection("removeFormat",null);
+											return scope.wrapSelection("italic", null);
+											
+											break;
+										 }
+										 
+										default:
+										{
+											
+											break;
+										}
+									}
+																
+                                    }
+									// to handle underline using shortcuts
+										var  _handleUnderline=function()
+										 
+										 {
+								        var flag = 0;
+				
+											selectedElement = angular.element(taSelection.getSelectionElementModified());
+											if (selectedElement[0].tagName == 'I' || selectedElement[0].tagName == 'EM')
+											{
+												flag = flag + 1;		
+												
+											}
+											
+											if (selectedElement[0].tagName == 'U')
+											{	
+												flag=flag + 2;
+																	
+											}
+											
+											if (selectedElement[0].tagName == 'P')
+											{
+												flag = flag + 4;
+											}
+											
+											if (selectedElement[0].tagName == 'U' && (selectedElement[0].tagName == 'I' || selectedElement[0].tagName == 'EM'))
+											{
+												flag = flag + 5;
+											}
+											
+											
+											
+										switch (flag)
+										{ 
+											 case (0):
+											 {
+												 
+												return scope.wrapSelection("underline",null);
+															
+												break;
+											 }
+											case (1):
+											 {
+											// if double underline is already ON , apply single underline
+											  
+												scope.wrapSelection("italic",null);
+											   return scope.wrapSelection("underline",null);
+											
+											   
+														
+												break;
+											 }
+											 case (2):
+											 { 
+											 //TO Remove Underline
+											 scope.wrapSelection("underline", null);
+											  return  scope.wrapSelection("removeFormat",null);
+											
+											  
+														
+												break;
+											 }
+											 case (3):
+											 {
+											 // Italic Underline
+											  scope.wrapSelection("removeFormat",null);
+												scope.wrapSelection("italic",null);
+												return scope.wrapSelection("underline", null);
+															
+												break;
+											 }
+											 case (4):
+											 {
+												//remove all styles and apply underline
+												
+												scope.wrapSelection("removeFormat", null);
+												return scope.wrapSelection("underline", null);
+												break;
+											 }
+											 case (5):
+											 {
+
+												//Italic Paragraph
+												scope.wrapSelection("removeFormat",null);
+												return scope.wrapSelection("underline", null);
+												
+												break;
+
+											 }
+											 case (6):
+											 {
+												//Underline Paragraph
+												scope.wrapSelection("removeFormat",null);
+										
+												break;
+											 }
+											 case (7):
+											 {
+												//Paragraph Underline Italic
+												scope.wrapSelection("removeFormat",null);
+												return scope.wrapSelection("underline", null);
+												
+												break;
+											 }
+											
+											default:
+											{
+												
+												break;
+											}
+										}
+									}
 					element.on('keydown', scope.events.keydown = function(event, eventData){
+
+						if (event.keyCode == 85 && event.ctrlKey == true) {
+
+												
+												_handleUnderline();
+					                           event.preventDefault();
+											   return false;
+												
+					                        }
+											 if (event.keyCode == 73 && event.ctrlKey == true) {
+
+											  
+												_handleDboubleUnderline();
+					                            event.preventDefault();
+												return false;
+					                        }
 						/* istanbul ignore else: this is for catching the jqLite testing*/
 						if(eventData) angular.extend(event, eventData);
 						event.specialKey = _mapKeys(event);

@@ -99,7 +99,6 @@ angular.module('textAngularSetup', [])
 	//
 	keyMappings : [],
 	toolbar: [
-		['p'],
 		[ 'italics', 'underline' , 'redo', 'undo'],
 		['wordcount', 'charcount']
 	],
@@ -376,17 +375,6 @@ angular.module('textAngularSetup', [])
 		return this.$editor().wrapSelection("formatBlock", "<" + this.name.toUpperCase() +">");
 	};
 
-	taRegisterTool('p', {
-		buttontext: 'P',
-		tooltiptext: taTranslations.p.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("formatBlock", "<P>");
-		},
-		activeState: function(){ return this.$editor().queryFormatBlockState('p'); }
-	});
-
-	
-	
 	taRegisterTool('undo', {
 		iconclass: 'fa fa-undo',
 		tooltiptext: taTranslations.undo.tooltip,
@@ -401,23 +389,113 @@ angular.module('textAngularSetup', [])
 			return this.$editor().wrapSelection("redo", null);
 		}
 	});
-	taRegisterTool('bold', {
-		iconclass: 'fa fa-bold',
-		tooltiptext: taTranslations.bold.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("bold", null);
-		},
-		activeState: function(){
-			return this.$editor().queryCommandState('bold');
-		},
-		commandKeyCode: 98
-	});
+	
 
 	taRegisterTool('italics', {
-		iconclass: 'fa fa-italic',
-		tooltiptext: taTranslations.italic.tooltip,
+		buttontext: 'DU',
+		tooltiptext: 'DoubleUnderline',
 		action: function(){
-			return this.$editor().wrapSelection("italic", null);
+			var flag = 0;
+			    selectedElement = angular.element(taSelection.getSelectionElementModified());
+				if (selectedElement[0].tagName == 'I'||selectedElement[0].tagName=='EM')
+				{
+					flag = flag + 1;
+				}
+				
+				if (selectedElement[0].tagName == 'U')
+				{	
+					flag=flag + 2;
+										
+				}
+				
+				if (selectedElement[0].tagName == 'P')
+				{
+					flag = flag + 4;
+				}
+				
+				if (selectedElement[0].tagName == '')
+				{
+					flag = flag + 8;
+				}
+				
+				
+				
+            switch (flag)
+			{ 
+				 case (0):
+				 {
+				    
+                    return this.$editor().wrapSelection("italic",null);
+				     			
+					break;
+				 }
+				 case (1):
+				 {
+              
+				  
+				  
+				    this.$editor().wrapSelection("italic",null);
+				   return this.$editor().wrapSelection("removeFormat",null);
+	              			
+					break;
+				 }
+				 case (2):
+				 { 
+				
+				 this.$editor().wrapSelection("underline",null);
+				  return this.$editor().wrapSelection("italic", null);
+							
+					break;
+				 }
+				 case (3):
+				 {
+				 
+                  this.$editor().wrapSelection("removeFormat",null);
+					this.$editor().wrapSelection("underline",null);
+					return this.$editor().wrapSelection("italic", null);
+								
+					break;
+				 }
+				 
+				 case (4):
+				 {
+				    
+					this.$editor().wrapSelection("removeFormat", null);	
+                    this.$editor().wrapSelection("removeFormat", null);						
+				    return this.$editor().wrapSelection("italic", null);
+	                
+					break;
+				 }
+				 case (5):
+				 {
+
+                 //Italic Paragraph
+				 this.$editor().wrapSelection("removeFormat",null);
+					
+					break;
+
+				 }
+				 case (6):
+				 {
+				    this.$editor().wrapSelection("removeFormat",null);
+					//Underline Paragraph
+					break;
+				 }
+				 case (7):
+				 {
+				    
+				    this.$editor().wrapSelection("removeFormat",null);
+					return this.$editor().wrapSelection("italic", null);
+					
+					break;
+				 }
+				 
+				default:
+				{
+					
+					break;
+				}
+			}
 		},
 		activeState: function(){
 			return this.$editor().queryCommandState('italic');
@@ -428,7 +506,113 @@ angular.module('textAngularSetup', [])
 		iconclass: 'fa fa-underline',
 		tooltiptext: taTranslations.underline.tooltip,
 		action: function(){
-			return this.$editor().wrapSelection("underline", null);
+			var flag = 0;
+				
+			    selectedElement = angular.element(taSelection.getSelectionElementModified());
+				if (selectedElement[0].tagName == 'I'||selectedElement[0].tagName=='EM')
+				{
+					flag = flag + 1;
+					
+					
+				}
+				
+				if (selectedElement[0].tagName == 'U')
+				{	
+					flag=flag + 2;
+										
+				}
+				
+				if (selectedElement[0].tagName == 'P')
+				{
+					flag = flag + 4;
+				}
+				
+				if (selectedElement[0].tagName == 'U' && selectedElement[0].tagName == 'I')
+				{
+					flag = flag + 5;
+				}
+				
+				
+				
+            switch (flag)
+			{ 
+				 case (0):
+				 {
+				     
+                    return this.$editor().wrapSelection("underline",null);
+				     			
+					break;
+				 }
+				case (1):
+				 {
+              
+				  
+					this.$editor().wrapSelection("italic",null);
+				   return this.$editor().wrapSelection("underline",null);
+				
+				   
+	              			
+					break;
+				 }
+				 case (2):
+				 { 
+				
+				 this.$editor().wrapSelection("underline", null);
+                  return  this.$editor().wrapSelection("removeFormat",null);
+				
+				  
+							
+					break;
+				 }
+				 case (3):
+				 {
+				 // Italic Underline
+                  this.$editor().wrapSelection("removeFormat",null);
+					this.$editor().wrapSelection("italic",null);
+					return this.$editor().wrapSelection("underline", null);
+								
+					break;
+				 }
+				 case (4):
+				 {
+				 
+					
+					this.$editor().wrapSelection("removeFormat", null);
+                    return this.$editor().wrapSelection("underline", null);
+					break;
+				 }
+				 case (5):
+				 {
+
+					//Italic Paragraph
+					this.$editor().wrapSelection("removeFormat",null);
+					return this.$editor().wrapSelection("underline", null);
+					
+					break;
+
+				 }
+				 case (6):
+				 {
+					//Underline Paragraph
+				    this.$editor().wrapSelection("removeFormat",null);
+			
+					break;
+				 }
+				 case (7):
+				 {
+					//Paragraph Underline Italic
+				    this.$editor().wrapSelection("removeFormat",null);
+					return this.$editor().wrapSelection("underline", null);
+					
+					break;
+				 }
+				
+				default:
+				{
+					
+					break;
+				}
+			}//switch (flag)
 		},
 		activeState: function(){
 			return this.$editor().queryCommandState('underline');

@@ -272,6 +272,31 @@ function($window, $document, taDOM){
 			}
 			return selection;
 		},
+		 getSelectionModified: function () {
+                var r1=rangy.getSelection();
+				var range=r1.getRangeAt(0);
+	           // var container = range.commonAncestorContainer;
+				var container = range.startContainer.childNodes[range.startOffset];
+				if(container==undefined)
+					//container=range.commonAncestorContainer.childNodes[range.startOffset];
+				container=range.endContainer.childNodes[range.endOffset];
+	            // Check if the container is a text node and return its parent if so
+	             container = container.nodeType === 3 ? container.parentNode : container;
+	            return {
+	                start: {
+	                    element: range.startContainer,
+	                    offset: range.startOffset
+	                },
+	                end: {
+	                    element: range.endContainer,
+	                    offset: range.endOffset
+	                },
+	                container: container,
+	                collapsed: range.collapsed
+
+	            };
+				return {container: container,collapsed: range.collapsed};
+	        },
 		getOnlySelectedElements: function(){
 			var range = rangy.getSelection().getRangeAt(0);
 			var container = range.commonAncestorContainer;
@@ -284,6 +309,9 @@ function($window, $document, taDOM){
 		// Some basic selection functions
 		getSelectionElement: function () {
 			return api.getSelection().container;
+		},
+		getSelectionElementModified: function () {
+			return api.getSelectionModified().container;
 		},
 		setSelection: function(el, start, end){
 			var range = rangy.createRange();

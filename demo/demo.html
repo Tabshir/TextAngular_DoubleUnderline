@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>textAngular_DoubleUnderline Demo</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel='stylesheet' href='font-awesome/css/font-awesome.css'>
+    <link rel='stylesheet' href='../dist/textAngular.css'>
+   
+
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js'></script>
+      
+        <script src='../dist/textAngular-rangy.min.js'></script>
+    
+      <script src='../dist/textAngular-sanitize.min.js'></script>
+    
+      <script src='../dist/textAngular.js'></script>
+      <script src='../dist/textAngularSetup.js'></script>
+
+</head>
+
+<body>
+    <div ng-app="textAngularTest" ng-controller="wysiwygeditor" class="container app">
+        <h1>Editor</h1>
+        
+        <text-angular name="htmlcontent" ng-model="htmlcontent" spellCheck="false">
+          
+        </text-angular>
+        
+        {{htmlcontent}}
+    </div>
+
+
+    <script type="text/javascript">
+    angular.module("textAngularTest", ['textAngular'])
+        .controller('wysiwygeditor', function wysiwygeditor($scope) {
+            $scope.orightml = '<p>Hello</p>';
+            $scope.htmlcontent = $scope.orightml;
+            $scope.disabled = false;
+        });
+    </script>
+</body>
+
+</html>
